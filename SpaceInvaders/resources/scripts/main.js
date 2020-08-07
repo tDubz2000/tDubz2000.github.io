@@ -8,12 +8,13 @@ Inteded to be linked to SpaceInavaders/index.html
 
 var enemies = []; //Globally accessible array intended to hold references to DOM elements of target class.
 
+//Load the screen with enemies and call on the move function for all enemies
 window.addEventListener("load", function () {
     for (i = 0; i < 10; i++) {
-        for (j = 0; j < 5; j++) {
+        for (j = 0; j < 4; j++) {
             var enemy = document.createElement("div");
             enemy.classList.add("target");
-            enemy.style.top = (10 + (j * (window.innerWidth - 30) / 10)) + "px";
+            enemy.style.top = (10 + (j * (window.innerWidth - 30) / 10)) + "px";    
             enemy.style.left = (10 + (i * ((window.innerWidth - 30) / 10))) + "px";
             enemies.push(enemy);
             document.getElementById("container").appendChild(enemy);
@@ -29,7 +30,7 @@ function moveTargets() {
     var moveR = setInterval(moveRight, 100);
     function moveRight() {
         enemies.forEach(element => {
-            if (parseInt(getComputedStyle(element).left) >= (window.innerWidth - 20)) {
+            if (parseInt(getComputedStyle(element).left) >= (window.innerWidth - (parseInt(getComputedStyle(enemies[1]).width, 10) + 10))) {
                 clearInterval(moveR);
                 canMove = false;
             }
@@ -130,19 +131,23 @@ function shoot(x, y) {
             clearInterval(pewPew);
             shot.remove();
             //If shot hits any targets, execute targetEliminated/Win condition
+            /*
+             *
+             * Code To Be Added Later!!!
+             * 
+             */
         } else {
-            var collision = false
-            var shotX1 = parseInt(getComputedStyle(shot).left, 10);
-            var shotX2 = shotX1 + parseInt(getComputedStyle(shot).width, 10);
-            var shotY1 = parseInt(getComputedStyle(shot).top, 10);
-            var shotY2 = shotY1 + parseInt(getComputedStyle(shot).height, 10);
+            var collision = false       //default state for collision is false, then code will verify this state
+            var shotX1 = parseInt(getComputedStyle(shot).left, 10);             //get SHOT bounding box corner X1 value
+            var shotX2 = shotX1 + parseInt(getComputedStyle(shot).width, 10);   //get SHOT bounding box corner X2 value
+            var shotY1 = parseInt(getComputedStyle(shot).top, 10);              //get SHOT bounding box corner Y1 value
+            var shotY2 = shotY1 + parseInt(getComputedStyle(shot).height, 10);  //get SHOT bounding box corner Y2 value
             enemies.forEach(element => {
-                var enemyX1 = parseInt(getComputedStyle(element).left, 10) - 4;
-                var enemyX2 = enemyX1 + parseInt(getComputedStyle(element).width, 10) * 1.5;
-                var enemyY1 = parseInt(getComputedStyle(element).top, 10);
-                var enemyY2 = enemyY1 + parseInt(getComputedStyle(element).height, 10);
+                var enemyX1 = parseInt(getComputedStyle(element).left, 10) - 4;             //get TARGET bounding box corner X1 value, then subtract 4 pixels becasuse of css borders
+                var enemyX2 = enemyX1 + parseInt(getComputedStyle(element).width, 10) + 4;  //get TARGET bounding box corner X2 value by using X1 plus target width. subtracting the 4 that we added previously.
+                var enemyY1 = parseInt(getComputedStyle(element).top, 10);                  //get TARGET bounding box corner Y1 value.
+                var enemyY2 = enemyY1 + parseInt(getComputedStyle(element).height, 10);     //get TARGET bounding box corner Y2 value by using Y1 value and addiugn the taget height.
                 if (shotX1 > enemyX1 && shotX2 < enemyX2 && shotY1 > enemyY1 && shotY2 < enemyY2) {
-                    console.log("HIT!");
                     collision = true;
                     element.remove();
                     shot.remove();
