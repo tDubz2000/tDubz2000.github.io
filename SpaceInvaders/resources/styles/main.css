@@ -55,8 +55,8 @@ body {
 
 .target {
     position: fixed;
-    width: 10px;
-    height: 10px;
-    background-color: red;
+    width: 48px;
+    height: 31px;
+    background-image: url("..\\images\\invader.gif");
 }
 
